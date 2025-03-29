@@ -6,20 +6,22 @@ from movies.views import home
 
 
 class HomePageTest(TestCase):
-    def test_root_url_resolves_to_home_page(self):
-        '''
-        Контроллер для '/' называется home
-        '''
-        found = resolve('/')
-        self.assertEqual(found.func.__name__, 'home')
-
     def test_home_page_returns_correct_html(self):
         '''
         тест: домашняя страница возвращает правильный html
         '''
-        request = HttpRequest()
-        response = home(request)
+        response = self.client.get('/')
         html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>Movies</title>', html)
+        self.assertTrue(
+            html.startswith('<!DOCTYPE html>'), 
+            "Проверьте, что возвращается страница HTML"
+            )
+        self.assertIn(
+            '<title>Movies</title>', html,
+            "Проверьте, что в заголовке главной страницы указано 'Movies'"
+            )
         self.assertTrue(html.endswith('</html>'))
+        self.assertTemplateUsed(
+            response, 'index.html', 
+            "Проверьте, что для главной страницы используется шаблон index.html"
+            )

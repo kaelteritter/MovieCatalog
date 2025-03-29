@@ -3,4 +3,4 @@ from django.shortcuts import render
 
 
 def home(request):
-    return HttpResponse('<html><title>Movies</title></html>')
+    return render(request, 'index.html')
