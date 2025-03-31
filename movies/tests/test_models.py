@@ -203,3 +203,36 @@ class ReviewModelTest(TestCase):
                             f'{getattr(existing_field, param)}, а должен: {value}'
                             )
                         
+class OverallTestModel(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser')
+        self.genre = Genre.objects.create(title='Ужасы')
+        self.movie = Movie.objects.create(title='Оно')
+        self.movie.genre.set([self.genre])
+        self.review = Review.objects.create(author=self.user, movie=self.movie)
+
+    def test_models_has_str_method(self):
+        self.assertEqual(str(self.movie), f'Movie: {self.movie.title}')
+        self.assertEqual(str(self.genre), f'Genre: {self.genre.title}')
+        self.assertEqual(
+            str(self.review), 
+            f'Review: Author: {self.review.author}; Movie: {self.review.movie.title}'
+            )
+        
+    def test_models_verbose_name(self):
+        names = {
+            'Movie': ('Фильм', 'Фильмы'),
+            'Genre': ('Жанр', 'Жанры'),
+            'Review': ('Отзыв', 'Отзывы'),
+        }
+
+        for model in [Movie, Genre, Review]:
+            with self.subTest(model=model):
+                self.assertEqual(
+                    str(model._meta.verbose_name), names.get(model.__name__)[0],
+                    'Человекочитаемое имя в ед.ч. должно быть другим'
+                    )
+                self.assertEqual(
+                    str(model._meta.verbose_name_plural), names.get(model.__name__)[1],
+                    'Человекочитаемое имя в мн.ч. должно быть другим'
+                    )
