@@ -25,3 +25,24 @@ class HomePageTest(TestCase):
             response, 'index.html', 
             "Проверьте, что для главной страницы используется шаблон index.html"
             )
+        
+class SignUpTest(TestCase):
+    def test_signup_page_returns_correct_html(self):
+        '''
+        тест: страница регистрации возвращает правильный html
+        '''
+        response = self.client.get('/signup/')
+        html = response.content.decode('utf8')
+        self.assertTrue(
+            html.startswith('<!DOCTYPE html>'), 
+            "Проверьте, что возвращается страница HTML"
+            )
+        self.assertIn(
+            '<title>Sign Up</title>', html,
+            "Проверьте, что в заголовке главной страницы указано 'Sign Up'"
+            )
+        self.assertTrue(html.endswith('</html>'))
+        self.assertTemplateUsed(
+            response, 'signup.html', 
+            "Проверьте, что для главной страницы используется шаблон signup.html"
+            )
