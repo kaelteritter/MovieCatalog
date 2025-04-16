@@ -23,7 +23,8 @@ class SingUpFormTest(TestCase):
         number_of_users_before = User.objects.count()
         data = {
             'email': 'alex@example.com',
-            'password': '!changeMe'
+            'password': '!changeMe',
+            'password2': '!changeMe',
         }
         self.client.post(reverse('movies:signup'), data=data, follow=True)
         self.assertEqual(User.objects.count(), number_of_users_before + 1)
