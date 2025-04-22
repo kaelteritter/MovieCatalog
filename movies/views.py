@@ -14,9 +14,7 @@ def signup(request):
     if request.method == 'POST':
         form = SingUpForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            form.username = form.cleaned_data.get('email')
-            user.save()
+            form.save()
         return redirect('movies:home')
     else:
         return render(request, 'signup.html', context={'form': SingUpForm()})
